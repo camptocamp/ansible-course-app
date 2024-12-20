@@ -1,0 +1,52 @@
+---
+# tasks file for wordpress
+- name: Configure nginx on Ubuntu
+  include_tasks: ubuntu.yml
+  when: ansible_facts['os_family'] == "Debian"
+
+- name: Configure nginx on RedHat
+  include_tasks: redhat.yml
+  when: ansible_facts['os_family'] == "RedHat"
+
+- name: Install python packages for MySQL integration
+  ansible.builtin.pip:
+    name: "{{ item }}"
+  loop:
+    - PyMySQL
+    #- wheel
+    #- mysqlclient
+
+- name: Start nginx service
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: yes
+
+- name: Start mariadb service
+  ansible.builtin.service:
+    name: mariadb
+    state: started
+    enabled: yes
+
+- name: "Create new database {{ wordpress_db_name }}"
+  community.mysql.mysql_db:
+    name: "{{ wordpress_db_name }}"
+    config_file: ''
+    state: present
+    login_unix_socket: "{{ wordpress_db_socket }}"
+
+- name: "Create user {{ wordpress_db_user }} in database {{ wordpress_db_name }}"
+  community.mysql.mysql_user:
+    state: present
+    config_file: ''
+    name: "{{ wordpress_db_user }}"
+    password: "{{ wordpress_db_password }}"
+    priv:
+      "{{ wordpress_db_name }}.*:ALL,GRANT"
+    login_unix_socket: "{{ wordpress_db_socket }}"
+
+- name: Render Wordpress configuration
+  ansible.builtin.template:
+    src: wp-config.php.j2
+    dest: /var/www/html/wordpress/wp-config.php
+  notify: Restart nginx

@@ -1,0 +1,55 @@
+---
+- name: Set fact of mariadb login_unix_socket on Ubuntu
+  ansible.builtin.set_fact:
+    wordpress_db_socket: /run/mysqld/mysqld.sock
+
+- name: Set fact of php socket on Ubuntu
+  ansible.builtin.set_fact:
+    php_socket: /run/php/php8.1-fpm.sock
+
+- name: Install LEMP packages on Ubuntu
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    update_cache: yes
+  loop:
+    - php
+    - php-fpm
+    - php-mysqlnd
+    - nginx
+    - python3-pip
+    - mariadb-server
+
+- name: Copy nginx configuration for wordpress on Ubuntu
+  ansible.builtin.template:
+    src: wordpress-nginx.conf.j2
+    dest: /etc/nginx/sites-available/wordpress.conf
+  notify: Restart nginx
+
+- name: Create a symbolic link on Ubuntu
+  ansible.builtin.file:
+    src: /etc/nginx/sites-available/wordpress.conf
+    dest: /etc/nginx/sites-enabled/wordpress.conf
+    owner: root
+    group: root
+    state: link
+  notify: Restart nginx
+
+- name: Disable default site on Ubuntu
+  ansible.builtin.file:
+    state: absent
+    path: /etc/nginx/sites-enabled/default
+  notify: Restart nginx
+
+- name: Create directory /var/www/html/ on Ubuntu
+  ansible.builtin.file:
+    dest: /var/www/html/
+    state: directory
+    owner: www-data
+
+- name: Get wordpress archive on Ubuntu
+  ansible.builtin.unarchive:
+    src: https://wordpress.org/latest.zip
+    dest: /var/www/html/
+    remote_src: yes
+    mode: '0755'
+    owner: www-data

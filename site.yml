@@ -1,0 +1,11 @@
+
+---
+- name: Setup WordPress
+  hosts: all
+  gather_facts: yes
+
+  vars:
+    wordpress_db_password: changeme123
+
+  roles:
+    - wordpress

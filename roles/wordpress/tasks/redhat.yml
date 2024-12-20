@@ -1,0 +1,46 @@
+---
+- name: Set fact of mariadb login_unix_socket on RedHat
+  ansible.builtin.set_fact:
+    wordpress_db_socket: /var/lib/mysql/mysql.sock
+
+- name: Set fact of php socket on RedHat
+  ansible.builtin.set_fact:
+    php_socket: /run/php-fpm/www.sock
+
+- name: Install LEMP packages on RedHat
+  ansible.builtin.package:
+    name: "{{ item }}"
+  loop:
+    - php
+    - php-fpm
+    - php-mysqlnd
+    - nginx
+    - python3-pip
+    - mariadb-server
+
+- name: Create directory /var/www/html/ on RedHat
+  ansible.builtin.file:
+    dest: /var/www/html/
+    state: directory
+    owner: nginx
+
+- name: Get wordpress archive on RedHat
+  ansible.builtin.unarchive:
+    src: https://wordpress.org/latest.zip
+    dest: /var/www/html/
+    remote_src: yes
+    mode: '0755'
+    owner: nginx
+
+- name: Copy nginx configuration for wordpress on RedHat
+  ansible.builtin.template:
+    src: wordpress-nginx.conf.j2
+    dest: /etc/nginx/conf.d/wordpress.conf
+  notify: Restart nginx
+
+- name: Add 80/tcp to firewalld on RedHat
+  ansible.posix.firewalld:
+    service: http
+    state: enabled
+    permanent: yes
+    immediate: yes
