@@ -1,0 +1,21 @@
+roles:
+
+  - name: common
+    src: https://github.com/camptocamp/ansible-course-app
+    version: common
+
+  - name: mariadb
+    src: https://github.com/camptocamp/ansible-course-app
+    version: mariadb
+
+  - name: nginx
+    src: https://github.com/camptocamp/ansible-course-app
+    version: nginx
+
+  - name: php-fpm
+    src: https://github.com/camptocamp/ansible-course-app
+    version: php-fpm
+
+  - name: wordpress
+    src: https://github.com/camptocamp/ansible-course-app
+    version: wordpress

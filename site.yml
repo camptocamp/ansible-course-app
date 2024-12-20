@@ -1,0 +1,20 @@
+---
+- name: Deploy Wordpress app
+  hosts: all
+  become: true
+
+  vars:
+    wp_version: 6.1.1
+    wp_db_name: wordpress
+    wp_db_user: wordpress_username
+    wp_db_password: wordpress_password
+    server_hostname: myserver.local
+    auto_up_disable: false
+    core_update_level: true
+
+  roles:
+    - common
+    - mariadb
+    - nginx
+    - php-fpm
+    - wordpress
