@@ -1,0 +1,32 @@
+---
+- name: Install "nginx" package
+  ansible.builtin.apt:
+    name: nginx
+    state: latest
+
+- name: Copy nginx configuration for wordpress
+  template: 
+    src: wordpress.conf.j2 
+    dest: /etc/nginx/sites-available/wordpress.conf
+  notify: Restart nginx
+
+- name: Create a symbolic link
+  ansible.builtin.file:
+    src: /etc/nginx/sites-available/wordpress.conf
+    dest: /etc/nginx/sites-enabled/wordpress.conf
+    owner: root
+    group: root
+    state: link
+  notify: Restart nginx
+
+- name: Disable default site
+  file:
+    state: absent
+    path: /etc/nginx/sites-enabled/default
+  notify: Restart nginx
+
+- name: HTTP service state
+  service: 
+    name: nginx
+    state: started
+    enabled: yes

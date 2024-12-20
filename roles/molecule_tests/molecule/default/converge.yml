@@ -1,0 +1,22 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include common"
+      ansible.builtin.include_role:
+        name: "common"
+    - name: "Include mariadb"
+      ansible.builtin.include_role:
+        name: "mariadb"
+    - name: "Include nginx"
+      ansible.builtin.include_role:
+        name: "nginx"
+    - name: "Include php-fpm"
+      ansible.builtin.include_role:
+        name: "php-fpm"
+    - name: "Include wordpress"
+      ansible.builtin.include_role:
+        name: "wordpress"
+    - name: "Include acme.molecule_tests"
+      include_role:
+        name: "acme.molecule_tests"

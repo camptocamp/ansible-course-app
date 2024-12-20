@@ -1,0 +1,28 @@
+---
+# This is an example playbook to execute Ansible tests.
+- name: Verify
+  hosts: all
+  vars:
+    expected_content: "Welcome to the famous five-minute WordPress installation process!"
+  gather_facts: false
+  tasks:
+  - name: Example assertion
+    ansible.builtin.assert:
+      that: true
+  - name: Get webserver's homepage
+    uri:
+      url: http://localhost
+      return_content: yes
+    register: this
+    failed_when: "expected_content not in this.content"
+ 
+  - name: Ensure content type is text/html
+    assert:
+      that:
+      - "'text/html' in this.content_type"
+ 
+  - name: Display HTML code received by the previous get, if you run at least with one "-v" argument
+    when: verbose is not defined
+    debug:
+      var: this.content
+      verbosity: 1

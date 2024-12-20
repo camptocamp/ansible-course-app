@@ -1,0 +1,8 @@
+---
+- name: Purge the server to test installation
+  hosts: wordpress-server
+  remote_user: administrator
+  become: yes
+
+  roles:
+    - purge

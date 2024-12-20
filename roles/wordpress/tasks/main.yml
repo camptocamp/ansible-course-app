@@ -1,0 +1,60 @@
+---
+- name: Download file with checksum url (sha1)
+  ansible.builtin.get_url:
+    url: https://wordpress.org/wordpress-{{ wp_version }}.tar.gz
+    dest: /var/www/wordpress-{{ wp_version }}.tar.gz
+    checksum: sha1:https://wordpress.org/wordpress-{{ wp_version }}.tar.gz.sha1
+
+- name: Extract archive
+  command: 
+    chdir: /var/www/ 
+    cmd: /bin/tar xvf wordpress-{{ wp_version }}.tar.gz 
+    creates: /var/www/wordpress
+
+# - name: Add group "wordpress"
+#   group: name=wordpress
+
+# - name: Add user "wordpress"
+#   user: name=wordpress group=wordpress home=/var/www/wordpress/
+
+# - name: Recursively change ownership of a directory
+#   ansible.builtin.file:
+#     path: /var/www/wordpress/
+#     state: directory
+#     recurse: yes
+#     owner: wordpress
+#     group: wordpress
+
+
+- name: Create WordPress database
+  mysql_db: 
+    name: "{{ wp_db_name }}"
+    state: present
+
+- name: Create WordPress database user
+  mysql_user:
+    name: "{{ wp_db_user }}" 
+    password: "{{ wp_db_password }}" 
+    priv: "{{ wp_db_name }}.*:ALL,GRANT"
+    state: present
+
+- name: Fetch random salts for WordPress config
+  local_action: command curl https://api.wordpress.org/secret-key/1.1/salt/
+  register: "wp_salt"
+  become: no
+
+- name: Copy WordPress config file
+  template: 
+    src: wp-config.php.j2
+    dest: /var/www/wordpress/wp-config.php
+
+- name: Change file ownership, group and permissions
+  ansible.builtin.file:
+    path: /var/www/wordpress/wp-config.php
+    # owner: wordpress
+    # group: wordpress
+    mode: '0644'
+
+# - name: Change ownership of WordPress installation
+#   file: path=/srv/wordpress/ owner=wordpress group=wordpress state=directory recurse=yes
+

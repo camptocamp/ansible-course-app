@@ -1,0 +1,63 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: podman
+platforms:
+  # - name: instance
+  #   image: quay.io/centos/centos:stream8
+  #   pre_build_image: true
+  - name: debian-11
+    image: docker.io/debian:11.6
+  - name: debian-11-slim
+    image: docker.io/debian:11.6-slim
+provisioner:
+  name: ansible
+  inventory:
+    links:
+      # hosts: ../../../inventory/hosts
+      group_vars: ../../../../group_vars
+      # host_vars: ../../../inventory/host_vars/
+  config_options:
+    defaults:
+      stdout_callback: yaml
+
+verifier:
+  name: ansible
+
+scenario:
+  create_sequence:
+    - dependency
+    - create
+    - prepare
+  check_sequence:
+    - dependency
+    - cleanup
+    - destroy
+    - create
+    - prepare
+    - converge
+    - check
+    - destroy
+  converge_sequence:
+    - dependency
+    - create
+    - prepare
+    - converge
+  destroy_sequence:
+    - dependency
+    - cleanup
+    - destroy
+  test_sequence:
+    - dependency
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    # - idempotence
+    - side_effect
+    - verify
+    - cleanup
+    - destroy
