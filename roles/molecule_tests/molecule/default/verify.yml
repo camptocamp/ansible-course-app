@@ -21,8 +21,8 @@
       that:
       - "'text/html' in this.content_type"
  
-  - name: Display HTML code received by the previous get, if you run at least with one "-v" argument
+  - name: Display HTML code received by the previous get
     when: verbose is not defined
     debug:
       var: this.content
-      verbosity: 1
+      verbosity: 0
