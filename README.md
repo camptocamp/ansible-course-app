@@ -12,9 +12,11 @@ They all aim to install WordPress with Ansible.
 
   Includes a one-size-fits-all role.
 
-* multi-role
+* molecule
 
-  Includes several roles that each serve distinct purposes.
+  Includes several roles that each serve distinct purposes, eg. to setup MariaDB or nginx.
+
+  With molecule it has a way of advanced containerized testing during role development.
 
 * role-per-repo
 
@@ -26,5 +28,3 @@ They all aim to install WordPress with Ansible.
     * nginx
     * php-fpm
     * wordpress
-
-
