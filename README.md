@@ -1,3 +1,5 @@
+[![ansible-lint](https://github.com/camptocamp/ansible-course-app/actions/workflows/ansible-lint.yml/badge.svg)](https://github.com/camptocamp/ansible-course-app/actions/workflows/ansible-lint.yml)
+
 # App for the Ansible training course
 
 The repository content is spread across different branches.
