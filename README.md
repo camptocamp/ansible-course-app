@@ -1,6 +1,7 @@
 # App for the Ansible training course
 
 This branch is for installing WordPress with separate roles that are stored in different folders.
+
 Also it includes molecule for testing during the role development.
 
 Setup molecule
