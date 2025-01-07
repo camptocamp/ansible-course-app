@@ -1,24 +1,26 @@
-## WordPress+Nginx+PHP-FPM+MariaDB on Debian11 Deployment
+# App for the Ansible training course
 
-- Requires Ansible 1.2 or newer
-- Expects Debian 11 host/s
+This branch is for installing WordPress with separate roles that are stored in different folders.
+Also it includes molecule for testing during the role development.
 
-These playbooks deploy a simple all-in-one configuration of the popular
-WordPress blogging platform and CMS, frontend by the Nginx web server and the PHP-FPM process manager. 
-To use, copy the `hosts.example` file to `hosts` and edit the `hosts` inventory file to include the names or URLs of the servers
-you want to deploy.
+Setup molecule
 
-Then run the playbook, like this:
+```shell
+$ python3 -m venv .venv
+$ source .venv/bin/activate
+$ python3 -m pip install molecule
+$ python3 -m pip install requests
+```
 
-	ansible-playbook -i hosts site.yml
+Run molecule tests
 
-The playbooks will configure MariaDB, WordPress, Nginx, and PHP-FPM on every single host defined as a wordpress-server. When the run
-is complete, you can hit access server to begin the WordPress configuration.
+```shell
+$ cd roles/molecule_tests
+$ molecule test
+```
 
-If you need to clean the VM to restart a test from scratch, run :
+Run the playbook that calls the roles
 
-	ansible-playbook -i hosts purge.yml
-
-### Ideas for Improvement
-
-These playbooks could be extended to separate the components (PHP-FPM, MySQL, Nginx) onto separate hosts and handle the configuration appropriately.
+```shell
+$ ansible-playbook -i ip.ad.dr.ess, site.yml
+```
