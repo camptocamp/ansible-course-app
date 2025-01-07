@@ -1,3 +1,5 @@
+[![ansible-lint](https://github.com/camptocamp/ansible-course-app/actions/workflows/ansible-lint.yml/badge.svg?branch=molecule)](https://github.com/camptocamp/ansible-course-app/actions/workflows/ansible-lint.yml)
+
 # App for the Ansible training course
 
 This branch is for installing WordPress with separate roles that are stored in different folders.
