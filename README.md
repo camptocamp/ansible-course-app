@@ -4,6 +4,12 @@
 
 This branch is for installing WordPress with a single role.
 
+Install the role requirements
+
+```shell
+$ ansible-galaxy install -r requirements.yml
+```
+
 Run the role
 
 ```shell
