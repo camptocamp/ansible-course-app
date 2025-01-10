@@ -18,6 +18,7 @@
     - nginx
     - python3-pip
     - mariadb-server
+    - unzip
 
 - name: Copy nginx configuration for wordpress on Ubuntu
   ansible.builtin.template:
