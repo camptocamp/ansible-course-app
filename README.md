@@ -14,7 +14,7 @@ They all aim to install WordPress with Ansible.
 
   Includes a one-size-fits-all role.
 
-* molecule
+* multi-role
 
   Includes several roles that each serve distinct purposes, eg. to setup MariaDB or nginx.
 
