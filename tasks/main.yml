@@ -10,7 +10,10 @@
     state: latest
 
 - name: Start MariaDB Service
-  service: name=mariadb state=started enabled=yes
+  ansible.builtin.service: 
+    name: mariadb 
+    state: started
+    enabled: true
   
 # If you encounter the "Please explicitly state intended protocol" error,
 # use the login_unix_socket argument
@@ -26,4 +29,3 @@
     name: ''
     host_all: yes
     state: absent
-
