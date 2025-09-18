@@ -9,16 +9,16 @@
 
 - name: Install LEMP packages on Ubuntu
   ansible.builtin.apt:
-    name: "{{ item }}"
+    name:
+      - php
+      - php-fpm
+      - php-mysqlnd
+      - nginx
+      - python3-pip
+      - mariadb-server
+      - unzip
     update_cache: yes
-  loop:
-    - php
-    - php-fpm
-    - php-mysqlnd
-    - nginx
-    - python3-pip
-    - mariadb-server
-    - unzip
+    state: present
 
 - name: Copy nginx configuration for wordpress on Ubuntu
   ansible.builtin.template:
